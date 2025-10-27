@@ -8,11 +8,11 @@ from pydub import AudioSegment
 from gigachat import GigaChat
 
 giga = GigaChat(
-    credentials='MDE5YTI1YzEtZDg1Yy03ZDc3LWJiNmEtZTMzNDE1MzQyNTFhOmVjMjk5YzRlLWE3ZjgtNDc4ZS04ZDk1LWQ5NDBhZDc3NzIyZg==',  # Замените на ваш токен
+    credentials='MDE5YTI1YzEtZDg1Yy03ZDc3LWJiNmEtZTMzNDE1MzQyNTFhOmVjMjk5YzRlLWE3ZjgtNDc4ZS04ZDk1LWQ5NDBhZDc3NzIyZg==',
     verify_ssl_certs=False
 )
 
-(MAIN_MENU, VOICE, TEXT) = range(3)
+(MAIN_MENU, VOICE, TEXT, SLOVO) = range(4)
 
 def ogg_to_wav_in_memory(ogg_data):
     ogg_buffer = io.BytesIO(ogg_data)
@@ -52,8 +52,8 @@ async def main_menu_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) 
     text = update.message.text
 
     if text == 'Словарь':
-        await update.message.reply_text("Функция словаря в разработке...")
-        return MAIN_MENU
+        await update.message.reply_text("Напшите слово, которое желаете понять")
+        return SLOVO
 
     elif text == 'Записать голосовое сообщение/написать предложение':
         reply_keyboard = [['Голосовое сообщение', 'Текстовое сообщение'], ['Назад']]
