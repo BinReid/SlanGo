@@ -1,0 +1,6 @@
+Flask==2.3.3
+SpeechRecognition==3.10.0
+pydub==0.25.1
+gigachat==0.1.11
+PyAudio==0.2.11
+gunicorn==21.2.0

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLANGO - Переводчик сленга</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9));
+            color: white;
+        }
+        .feature-card {
+            transition: transform 0.3s ease;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .logo-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            object-fit: cover;
+        }
+        .btn-custom {
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="card shadow-lg border-0">
+                    <!-- Hero Section -->
+                    <div class="hero-section rounded-top-3 py-5 px-4 text-center">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <img src="{{ url_for('static', filename='data/photo_2025-10-28_01-05-58.jpg') }}" 
+                                     alt="SLANGO" class="logo-img shadow">
+                            </div>
+                            <div class="col">
+                                <h1 class="display-4 fw-bold mb-2">SLANGO</h1>
+                                <p class="lead mb-0 opacity-90">Мост между сленгом и литературной речью</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Section -->
+                    <div class="card-body p-4 p-md-5">
+                        <div class="row">
+                            <!-- Main Content -->
+                            <div class="col-12 col-lg-8">
+                                <p class="fs-5 text-muted mb-4">
+                                    SLANGO - это инновационный бот, который помогает понять современный сленг и переводит его на литературный язык. Незаменимый помощник для родителей, учителей и всех, кто хочет оставаться в курсе языковых тенденций.
+                                </p>
+
+                                <div class="row g-4">
+                                    <div class="col-12 col-md-6">
+                                        <div class="card feature-card h-100">
+                                            <div class="card-body text-center p-4">
+                                                <i class="bi bi-robot fs-1 text-primary mb-3"></i>
+                                                <h5 class="card-title">Автоматический перевод</h5>
+                                                <p class="card-text text-muted">Сленг ↔ литературный язык</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="card feature-card h-100">
+                                            <div class="card-body text-center p-4">
+                                                <i class="bi bi-book fs-1 text-success mb-3"></i>
+                                                <h5 class="card-title">База выражений</h5>
+                                                <p class="card-text text-muted">Обширная коллекция сленга</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="card feature-card h-100">
+                                            <div class="card-body text-center p-4">
+                                                <i class="bi bi-arrow-left-right fs-1 text-warning mb-3"></i>
+                                                <h5 class="card-title">Обратный перевод</h5>
+                                                <p class="card-text text-muted">В обе стороны</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-md-6">
+                                        <div class="card feature-card h-100">
+                                            <div class="card-body text-center p-4">
+                                                <i class="bi bi-chat-dots fs-1 text-info mb-3"></i>
+                                                <h5 class="card-title">Примеры в контексте</h5>
+                                                <p class="card-text text-muted">Реальные ситуации использования</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Sidebar with Buttons -->
+                            <div class="col-12 col-lg-4 mt-4 mt-lg-0">
+                                <div class="d-grid gap-3">
+                                    <a href="{{ bot_info.telegram_url }}" class="btn btn-primary btn-custom" target="_blank">
+                                        <i class="bi bi-telegram me-2"></i>
+                                        Написать в Telegram
+                                    </a>
+                                    <a href="{{ bot_info.web_version_url }}" class="btn btn-success btn-custom">
+                                        <i class="bi bi-globe me-2"></i>
+                                        Веб-версия
+                                    </a>
+                                </div>
+
+                                <!-- Advantages -->
+                                <div class="mt-5">
+                                    <h5 class="fw-bold mb-3 text-center">Преимущества:</h5>
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item d-flex align-items-center border-0">
+                                            <i class="bi bi-check-circle-fill text-success me-3"></i>
+                                            <span>Быстрый перевод</span>
+                                        </div>
+                                        <div class="list-group-item d-flex align-items-center border-0">
+                                            <i class="bi bi-check-circle-fill text-success me-3"></i>
+                                            <span>Простой интерфейс</span>
+                                        </div>
+                                        <div class="list-group-item d-flex align-items-center border-0">
+                                            <i class="bi bi-check-circle-fill text-success me-3"></i>
+                                            <span>Актуальный сленг</span>
+                                        </div>
+                                        <div class="list-group-item d-flex align-items-center border-0">
+                                            <i class="bi bi-check-circle-fill text-success me-3"></i>
+                                            <span>Полностью бесплатно</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

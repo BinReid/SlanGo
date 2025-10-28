@@ -3,45 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SlanGo</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylev.css') }}">
+    <title>SLANGO</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            overflow: hidden;
+            }
+        
+        .header-section {
+            background: #3a8a0c;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .content-section {
+            padding: 3rem 2rem;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .btn-custom {
+            padding: 12px 25px;
+            margin: 10px 0;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            text-decoration: none;
+        }
+        
+        .btn-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: #555;
+        }
+        
+        .hero-image {
+            width: 6%;
+            height: 60px;
+            border-radius: 30px;
+            margin-bottom: 10px;
+        }
+        
+        /* Новые стили для выравнивания кнопок */
+        .buttons-sidebar {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        @media (max-width: 768px) {
+            .content-section {
+                padding: 2rem 1rem;
+            }
+            
+            .header-section {
+                padding: 2rem 1rem;
+            }
+            
+            .buttons-sidebar {
+                margin-top: 2rem;
+                justify-content: flex-start;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🤖 SlanGo</h1>
-            <p>Мост между сленгом и литературной речью</p>
-        </div>
-        
-        <div class="content">
-            <p class="description">
-                {{ bot_info.description }}
-            </p>
-            
-            <div class="features">
-                {% for feature in bot_info.features %}
-                <div class="feature-item">
-                    <div class="feature-icon">{{ feature.split(' ')[0] }}</div>
-                    <div>{{ ' '.join(feature.split(' ')[1:]) }}</div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="main-container">                    
+                    <div class="header-section">
+                        <h1 class="display-4 fw-bold"><img src="static\data\photo_2025-10-28_01-05-58.jpg" alt="SLANGO - Переводчик сленга" class="hero-image">SLANGO</h1>
+                        <p class="lead mb-0">Мост между сленгом и литературной речью</p>
+                    </div>
+                    
+                    <div class="row">
+                        <!-- Основной контент -->
+                        <div class="col-12 col-lg-8">
+                            <div class="content-section">
+                                <p class="description">
+                                    SLANGO - это инновационный бот, который помогает понять современный сленг и переводит его на литературный язык. Незаменимый помощник для родителей, учителей и всех, кто хочет оставаться в курсе языковых тенденций.
+                                </p>
+                                
+                                <div class="features">
+                                    <div class="feature-item">
+                                        <div class="feature-icon">🤖</div>
+                                        <div class="feature-text">Автоматический перевод сленга на литературный язык</div>
+                                    </div>
+                                    <div class="feature-item">
+                                        <div class="feature-icon">📚</div>
+                                        <div class="feature-text">Обширная база современных выражений</div>
+                                    </div>
+                                    <div class="feature-item">
+                                        <div class="feature-icon">🔄</div>
+                                        <div class="feature-text">Обратный перевод - из литературного в сленг</div>
+                                    </div>
+                                    <div class="feature-item">
+                                        <div class="feature-icon">💬</div>
+                                        <div class="feature-text">Примеры использования в контексте</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Боковая панель с кнопками -->
+                        <div class="col-12 col-lg-4">
+                            <div class="content-section buttons-sidebar">
+                                <div class="d-grid gap-2">
+                                    <a href="{{ bot_info.telegram_url }}" class="btn btn-primary btn-custom" target="_blank">
+                                        <span class="btn-icon">📱</span>
+                                        Написать в Telegram
+                                    </a>
+                                    <a href="{{ bot_info.web_version_url }}" class="btn btn-success btn-custom">
+                                        <span class="btn-icon">🌐</span>
+                                        Веб-версия
+                                    </a>
+                                </div>
+                                
+                                <!-- Дополнительная информация -->
+                                <div class="mt-5">
+                                    <h5 class="fw-bold mb-3">Преимущества:</h5>
+                                    <ul class="list-unstyled">
+                                        <li class="mb-2">✅ Быстрый перевод</li>
+                                        <li class="mb-2">✅ Простой интерфейс</li>
+                                        <li class="mb-2">✅ Актуальный сленг</li>
+                                        <li class="mb-2">✅ Бесплатно</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                {% endfor %}
-            </div>
-            
-            <div class="buttons">
-                <a href="{{ bot_info.telegram_url }}" class="btn btn-primary" target="_blank">
-                    <span class="btn-icon">📱</span>
-                    Написать в Telegram
-                </a>
-                <a href="{{ bot_info.web_version_url }}" class="btn btn-primary">
-                    <span class="btn-icon">🌐</span>
-                    Веб-версия
-                </a>
-                <a href="{{ bot_info.slovar }}" class="btn btn-primary">
-                    <span class="btn-icon">🌐</span>
-                    Словарь
-                </a>
             </div>
         </div>
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>
