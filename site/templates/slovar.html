@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Словарь современного сленга</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{url_for('static', filename='js/scripts.js')}}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Словарь сленга</h1>
+            <p class="tagline">Современные слова и выражения, которые нужно знать</p>
+        </header>
+
+        <main>
+            <section class="description">
+                <p>Исследуйте мир современного сленга! Нажмите на любое слово, чтобы узнать его значение, происхождение и примеры использования.</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-number" id="words-count">0</div>
+                        <div>слов в словаре</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">2025</div>
+                        <div>актуальная версия</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="search-container">
+                <input type="text" class="search-input" id="search-input" placeholder="🔍 Поиск по словам...">
+            </section>
+
+            <section class="words-section">
+                <div class="words-grid" id="words-grid">
+                    <!-- Слова будут добавлены через JavaScript -->
+                </div>
+            </section>
+
+            <section class="word-details" id="word-details">
+                <div class="word-header">
+                    <h2 class="word-title" id="detail-word">Слово</h2>
+                    <button class="close-btn" id="close-details">✕ Закрыть</button>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>📖 Значение</h3>
+                    <p id="detail-meaning">Здесь будет значение слова...</p>
+                </div>
+                
+                <div class="detail-section">
+                    <h3>🌍 Происхождение</h3>
+                    <p id="detail-origin">Здесь будет информация о происхождении...</p>
+                </div>
+            </section>
+              <div class="buttons">
+                <a href="{{ bot_info.telegram_url }}" class="btn btn-primary" target="_blank">
+                    <span class="btn-icon">📱</span>
+                    Написать в Telegram
+                </a>
+                <a href="{{ bot_info.web_version_url }}" class="btn btn-primary">
+                    <span class="btn-icon">🌐</span>
+                    Веб-версия
+                </a>
+                <a href="{{ bot_info.slovar }}" class="btn btn-secondary">
+                    <span class="btn-icon">🌐</span>
+                    Словарь
+                </a>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025 Словарь современного сленга. Понимай и будь понятым.</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlanGo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="{{url_for('static', filename='js/script.js')}}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>SlanGo</h1>
+            <p class="tagline">Переводим с молодёжного на литературный и обратно</p>
+        </header>
+
+        <main>
+            <section class="description">
+                <p>Наш переводчик легко "переведет" любую непонятную фразу с современного сленга на классический русский язык. И наоборот — поможет вашим текстам звучать актуально.</p>
+                <div class="example">
+                    <p><strong>Пример:</strong> "Этот криповый видос – pure кринж" → "Этот страшный видеоролик вызывает сильное чувство стыда и неловкости"</p>
+                </div>
+            </section>
+
+            <!-- Секция перевода -->
+            <section class="translation-section">
+                <h2>🤖 Переводчик сленга</h2>
+                
+                <div class="input-methods">
+                    <div class="method-btn active" data-method="text">
+                        📝 Текстовый ввод
+                    </div>
+                    <div class="method-btn" data-method="voice">
+                        🎤 Голосовой ввод
+                    </div>
+                </div>
+
+                <!-- Текстовый ввод -->
+                <div class="input-area active" id="text-input">
+                    <textarea class="text-input" id="text-to-translate" 
+                            placeholder="Введите текст для перевода... Например: 'Этот видос такой кринжовый'"></textarea>
+                </div>
+
+                <!-- Голосовой ввод -->
+                <div class="input-area" id="voice-input">
+                    <div class="voice-input">
+                        <button class="record-btn" id="record-button" type="button">
+                            🎤 Начать запись
+                        </button>
+                        <div id="recording-status" style="margin-top: 1rem; display: none;">
+                            <p>🔴 Идет запись... Говорите сейчас</p>
+                            <p id="recording-timer">00:00</p>
+                        </div>
+                        <div id="audio-playback" style="margin-top: 1rem; display: none;">
+                            <audio controls id="recorded-audio"></audio>
+                            <p>Прослушайте запись перед отправкой</p>
+                        </div>
+                    </div>
+                    <div id="voice-debug" style="margin-top: 1rem; font-size: 14px; color: #666;"></div>
+                </div>
+
+                <button class="translate-btn" id="translate-button">
+                    🔄 Перевести
+                </button>
+
+                <!-- Добавьте эти элементы -->
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Обрабатываю запрос...</p>
+                </div>
+
+                <div class="result-area" id="result-area">
+                    <div id="result-content"></div>
+                </div>
+            </section>
+
+            <div class="buttons">
+                <a href="{{ bot_info.telegram_url }}" class="btn btn-primary" target="_blank">
+                    <span class="btn-icon">📱</span>
+                    Написать в Telegram
+                </a>
+                <a href="{{ bot_info.web_version_url }}" class="btn btn-secondary">
+                    <span class="btn-icon">🌐</span>
+                    Веб-версия
+                </a>
+                <a href="{{ bot_info.slovar }}" class="btn btn-primary">
+                    <span class="btn-icon">🌐</span>
+                    Словарь
+                </a>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025 SlanGo. Общайтесь без барьеров.</p>
+        </footer>
+    </div>
+</body>
+</html>

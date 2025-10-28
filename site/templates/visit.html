@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlanGo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylev.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 SlanGo</h1>
+            <p>Мост между сленгом и литературной речью</p>
+        </div>
+        
+        <div class="content">
+            <p class="description">
+                {{ bot_info.description }}
+            </p>
+            
+            <div class="features">
+                {% for feature in bot_info.features %}
+                <div class="feature-item">
+                    <div class="feature-icon">{{ feature.split(' ')[0] }}</div>
+                    <div>{{ ' '.join(feature.split(' ')[1:]) }}</div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="buttons">
+                <a href="{{ bot_info.telegram_url }}" class="btn btn-primary" target="_blank">
+                    <span class="btn-icon">📱</span>
+                    Написать в Telegram
+                </a>
+                <a href="{{ bot_info.web_version_url }}" class="btn btn-primary">
+                    <span class="btn-icon">🌐</span>
+                    Веб-версия
+                </a>
+                <a href="{{ bot_info.slovar }}" class="btn btn-primary">
+                    <span class="btn-icon">🌐</span>
+                    Словарь
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
