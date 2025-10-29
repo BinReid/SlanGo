@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify, Blueprint
 import socket
-from nnn import process_with_gigachat, recognize_speech_from_memory
+from neuron_model_site import process_with_gigachat, recognize_speech_from_memory
 
 main_bp = Blueprint('main', __name__)
     
@@ -15,21 +15,19 @@ def get_local_ip():
     except:
         return "127.0.0.1"
 
-
-@main_bp.route('/')
-def index():
+def get_bot_info():
+    """Функция для получения информации о боте"""
     local_ip = get_local_ip()
     port = 5000
     
-    bot_info = {
-        'name': 'Slang Translator Bot',
-        'description': 'Интеллектуальный помощник для перевода между современным сленгом и литературным русским языком',
+    return {
+        'name': 'SLANGO',
+        'description': 'Мост между сленгом и литературной речью',
         'features': [
-            '🤖 Использует продвинутые нейронные сети GigaChat',
-            '🎤 Поддержка голосовых сообщений',
-            '📝 Работа с текстовыми запросами',
-            '🔄 Двусторонний перевод: сленг ↔ литературный язык',
-            '⚡ Автоматическое определение стиля речи'
+            'Автоматический перевод сленга на литературный язык',
+            'Обширная база современных выражений',
+            'Обратный перевод - из литературного в сленг',
+            'Примеры использования в контексте'
         ],
         'telegram_url': 'https://t.me/Slan_Go_bot',
         'web_version_url': '/webot',
@@ -38,55 +36,16 @@ def index():
         'port': port,
         'local_url': f'http://{local_ip}:{port}'
     }
+
+@main_bp.route('/')
+def index():
+    bot_info = get_bot_info()
     return render_template('visit.html', bot_info=bot_info)
 
 @main_bp.route('/webot')
 def webot():
-    local_ip = get_local_ip()
-    port = 5000
-    
-    bot_info = {
-        'name': 'Slang Translator Bot',
-        'description': 'Интеллектуальный помощник для перевода между современным сленгом и литературным русским языком',
-        'features': [
-            '🤖 Использует продвинутые нейронные сети GigaChat',
-            '🎤 Поддержка голосовых сообщений',
-            '📝 Работа с текстовыми запросами',
-            '🔄 Двусторонний перевод: сленг ↔ литературный язык',
-            '⚡ Автоматическое определение стиля речи'
-        ],
-        'telegram_url': 'https://t.me/Slan_Go_bot',
-        'web_version_url': '/webot',
-        'slovar': '/slovar',
-        'local_ip': local_ip,
-        'port': port,
-        'local_url': f'http://{local_ip}:{port}'
-    }
-    return render_template('visitka.html', bot_info=bot_info)
-
-@main_bp.route('/slovar')
-def slovar():
-    local_ip = get_local_ip()
-    port = 5000
-    
-    bot_info = {
-        'name': 'Slang Translator Bot',
-        'description': 'Интеллектуальный помощник для перевода между современным сленгом и литературным русским языком',
-        'features': [
-            '🤖 Использует продвинутые нейронные сети GigaChat',
-            '🎤 Поддержка голосовых сообщений',
-            '📝 Работа с текстовыми запросами',
-            '🔄 Двусторонний перевод: сленг ↔ литературный язык',
-            '⚡ Автоматическое определение стиля речи'
-        ],
-        'telegram_url': 'https://t.me/Slan_Go_bot',
-        'web_version_url': '/webot',
-        'slovar': '/slovar',
-        'local_ip': local_ip,
-        'port': port,
-        'local_url': f'http://{local_ip}:{port}'
-    }
-    return render_template('slovar.html', bot_info=bot_info)
+    bot_info = get_bot_info()
+    return render_template('webbot.html', bot_info=bot_info)
 
 @main_bp.route('/translate/text', methods=['POST'])
 def translate_text():
@@ -126,8 +85,12 @@ def translate_voice():
         # Читаем аудио данные
         audio_data = audio_file.read()
         
+        if len(audio_data) < 100:
+            return jsonify({'success': False, 'error': 'Аудио файл слишком короткий'})
+        
         # Распознаем речь
         recognized_text = recognize_speech_from_memory(audio_data)
+        
         if not recognized_text:
             return jsonify({'success': False, 'error': 'Не удалось распознать речь'})
         

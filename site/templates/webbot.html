@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ru" data-bs-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SlanGo - Веб-версия</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="gradient-bg">
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <!-- Header -->
+                <div class="card hero-section border-0 mb-4">
+                    <div class="card-body text-center py-4">
+                        <img src="static/data/photo_2025-10-28_01-05-58.jpg" alt="SLANGO">
+                        <h2 class="m-0">SLANGO</h2>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="card translation-card mb-4">
+                    <div class="card-body">
+                        <p class="mb-3">Наш переводчик легко "переведет" любую непонятную фразу с современного сленга на классический русский язык. И наоборот — поможет вашим текстам звучать актуально.</p>
+                        <div class="alert alert-info mb-0">
+                            <strong>Пример:</strong> "Этот криповый видос – pure кринж" → "Этот страшный видеоролик вызывает сильное чувство стыда и неловкости"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Translation Section -->
+                <div class="card translation-card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-4">
+                            <i class="bi bi-robot me-2"></i> Переводчик сленга
+                        </h4>
+
+                        <!-- Input Methods -->
+                        <div class="btn-group w-100 mb-4" role="group">
+                            <input type="radio" class="btn-check" name="inputMethod" id="textMethod" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary method-btn" for="textMethod">
+                                <i class="bi bi-text-paragraph me-2"></i>Текстовый ввод
+                            </label>
+                            
+                            <input type="radio" class="btn-check" name="inputMethod" id="voiceMethod" autocomplete="off">
+                            <label class="btn btn-outline-primary method-btn" for="voiceMethod">
+                                <i class="bi bi-mic me-2"></i>Голосовой ввод
+                            </label>
+                        </div>
+
+                        <!-- Text Input -->
+                        <div class="input-area" id="text-input">
+                            <textarea class="form-control" id="text-to-translate" rows="4" 
+                                      placeholder="Введите текст для перевода... Например: 'Этот видос такой кринжовый'"></textarea>
+                        </div>
+
+                        <!-- Voice Input -->
+                        <div class="input-area d-none" id="voice-input">
+                            <div class="text-center p-4 border rounded">
+                                <button class="btn btn-danger btn-lg record-btn mb-3" id="record-button">
+                                    <i class="bi bi-mic-fill me-2"></i>Начать запись
+                                </button>
+                                
+                                <div id="recording-status" class="d-none">
+                                    <div class="alert alert-warning mb-3">
+                                        <i class="bi bi-record-circle me-2"></i>Идет запись... Говорите сейчас
+                                    </div>
+                                    <h5 id="recording-timer" class="text-danger">00:00</h5>
+                                </div>
+                                
+                                <div id="audio-playback" class="d-none mt-3">
+                                    <audio controls class="w-100" id="recorded-audio"></audio>
+                                    <small class="text-muted">Прослушайте запись перед отправкой</small>
+                                </div>
+                            </div>
+                            <div id="voice-debug" class="mt-2 small text-muted"></div>
+                        </div>
+                        <!-- Translate Button -->
+                        <button class="btn btn-warning w-100 mt-4 py-3 fw-bold" id="translate-button">
+                            <i class="bi bi-arrow-left-right me-2"></i>Перевести
+                        </button>
+
+                        <!-- Loading -->
+                        <div class="text-center mt-4 d-none" id="loading">
+                            <div class="spinner-border loading-spinner text-primary" role="status">
+                                <span class="visually-hidden">Загрузка...</span>
+                            </div>
+                            <p class="mt-2 text-muted">Обрабатываю запрос...</p>
+                        </div>
+
+                        <!-- Results -->
+                        <div class="mt-4 d-none" id="result-area">
+                            <div id="result-content"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="card translation-card mt-4">
+                    <div class="card-body p-0">
+                        <div class="row g-0 nav-buttons">
+                            <div class="col-12 col-md-6 p-2 border-end">
+                                <a href="https://t.me/Slan_Go_bot" class="btn btn-primary w-100 h-100" target="_blank">
+                                    <i class="bi bi-telegram me-2"></i>Telegram
+                                </a>
+                            </div>
+                            <div class="col-12 col-md-6 p-2">
+                                <a href="/" class="btn btn-outline-secondary w-100 h-100">
+                                    <i class="bi bi-house me-2"></i>Главная
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+         // Глобальные переменные для записи
+        let mediaRecorder = null;
+        let audioChunks = [];
+        let isRecording = false;
+        let recordingTimer = null;
+        let recordingSeconds = 0;
+
+        // Переключение между методами ввода
+        document.getElementById('textMethod').addEventListener('change', function() {
+            document.getElementById('text-input').classList.remove('d-none');
+            document.getElementById('voice-input').classList.add('d-none');
+            document.getElementById('translate-button').innerHTML = '<i class="bi bi-arrow-left-right me-2"></i>Перевести';
+            
+            // Останавливаем запись если она идет
+            if (isRecording) {
+                stopRecording();
+            }
+        });
+
+        document.getElementById('voiceMethod').addEventListener('change', function() {
+            document.getElementById('text-input').classList.add('d-none');
+            document.getElementById('voice-input').classList.remove('d-none');
+            document.getElementById('translate-button').innerHTML = '<i class="bi bi-mic me-2"></i>Обработать голос';
+            
+            // Проверяем поддержку записи
+            setTimeout(checkMediaRecorderSupport, 100);
+        });
+
+        // Проверка поддержки записи
+        function checkMediaRecorderSupport() {
+            const voiceDebug = document.getElementById('voice-debug');
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                voiceDebug.innerHTML = '❌ Браузер не поддерживает доступ к микрофону';
+                return false;
+            }
+            
+            if (!window.MediaRecorder) {
+                voiceDebug.innerHTML = '❌ Браузер не поддерживает MediaRecorder API';
+                return false;
+            }
+            
+            voiceDebug.innerHTML = '✅ Микрофон поддерживается. Нажмите "Начать запись"';
+            return true;
+        }
+
+        // Запись голоса
+        document.getElementById('record-button').addEventListener('click', async function() {
+            if (!isRecording) {
+                await startRecording();
+            } else {
+                stopRecording();
+            }
+        });
+
+        async function startRecording() {
+            try {
+                const voiceDebug = document.getElementById('voice-debug');
+                voiceDebug.innerHTML = '🔊 Запрос доступа к микрофону...';
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        sampleRate: 16000 // Уменьшаем для лучшей совместимости
+                    } 
+                });
+                
+                voiceDebug.innerHTML = '✅ Микрофон доступен. Начинаю запись...';
+                
+                // Используем базовый формат для максимальной совместимости
+                const options = { 
+                    audioBitsPerSecond: 128000
+                };
+                
+                mediaRecorder = new MediaRecorder(stream, options);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                        console.log('Добавлен аудио чанк:', event.data.size, 'bytes');
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    const voiceDebug = document.getElementById('voice-debug');
+                    voiceDebug.innerHTML = `⏹️ Запись завершена. Получено ${audioChunks.length} чанков`;
+                    
+                    if (audioChunks.length > 0) {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const recordedAudio = document.getElementById('recorded-audio');
+                        recordedAudio.src = URL.createObjectURL(audioBlob);
+                        document.getElementById('audio-playback').classList.remove('d-none');
+                        voiceDebug.innerHTML = '✅ Запись готова к отправке';
+                    } else {
+                        voiceDebug.innerHTML = '⚠️ Внимание: запись пустая';
+                    }
+                    
+                    // Освобождаем поток
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start(500); // Собираем данные каждые 500ms
+                isRecording = true;
+                
+                const recordButton = document.getElementById('record-button');
+                recordButton.classList.add('recording');
+                recordButton.innerHTML = '<i class="bi bi-stop-fill me-2"></i>Остановить запись';
+                document.getElementById('recording-status').classList.remove('d-none');
+                document.getElementById('audio-playback').classList.add('d-none');
+                
+                startTimer();
+                voiceDebug.innerHTML = '🎤 Идет запись... Говорите сейчас';
+                
+            } catch (error) {
+                console.error('Recording error:', error);
+                const voiceDebug = document.getElementById('voice-debug');
+                voiceDebug.innerHTML = '❌ Ошибка доступа к микрофону: ' + error.message;
+                showResult('error', 'Не удалось получить доступ к микрофону: ' + error.message);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                
+                const recordButton = document.getElementById('record-button');
+                recordButton.classList.remove('recording');
+                recordButton.innerHTML = '<i class="bi bi-mic-fill me-2"></i>Записать снова';
+                document.getElementById('recording-status').classList.add('d-none');
+                
+                stopTimer();
+                const voiceDebug = document.getElementById('voice-debug');
+                voiceDebug.innerHTML = '⏹️ Запись остановлена';
+            }
+        }
+
+        // Таймер записи
+        function startTimer() {
+            recordingSeconds = 0;
+            const timerEl = document.getElementById('recording-timer');
+            timerEl.textContent = '00:00';
+            
+            recordingTimer = setInterval(() => {
+                recordingSeconds++;
+                const minutes = Math.floor(recordingSeconds / 60);
+                const seconds = recordingSeconds % 60;
+                timerEl.textContent = 
+                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (recordingTimer) {
+                clearInterval(recordingTimer);
+                recordingTimer = null;
+            }
+            recordingSeconds = 0;
+        }
+
+        // Обработка текстового перевода
+        async function handleTextTranslation() {
+            const text = document.getElementById('text-to-translate').value.trim();
+            const loading = document.getElementById('loading');
+            const resultArea = document.getElementById('result-area');
+            const resultContent = document.getElementById('result-content');
+            const translateBtn = document.getElementById('translate-button');
+
+            if (!text) {
+                showResult('error', 'Пожалуйста, введите текст для перевода');
+                return;
+            }
+
+            loading.classList.remove('d-none');
+            resultArea.classList.add('d-none');
+            translateBtn.disabled = true;
+
+            try {
+                const response = await fetch('/translate/text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: text })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResult('success', `
+                        <div class="alert alert-light">
+                            <strong>Исходный текст:</strong><br>
+                            ${data.original_text}
+                        </div>
+                        <div class="alert alert-success">
+                            <strong>Перевод:</strong><br>
+                            ${data.translated_text}
+                        </div>
+                    `);
+                } else {
+                    showResult('error', data.error || 'Произошла ошибка при переводе');
+                }
+            } catch (error) {
+                showResult('error', 'Ошибка соединения с сервером: ' + error.message);
+            } finally {
+                loading.classList.add('d-none');
+                translateBtn.disabled = false;
+            }
+        }
+
+        // Обработка голосового перевода
+        async function handleVoiceTranslation() {
+            if (!audioChunks || audioChunks.length === 0) {
+                showResult('error', 'Пожалуйста, сначала запишите голосовое сообщение');
+                return;
+            }
+
+            const loading = document.getElementById('loading');
+            const resultArea = document.getElementById('result-area');
+            const resultContent = document.getElementById('result-content');
+            const translateBtn = document.getElementById('translate-button');
+            const voiceDebug = document.getElementById('voice-debug');
+
+            loading.classList.remove('d-none');
+            resultArea.classList.add('d-none');
+            translateBtn.disabled = true;
+
+            try {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                
+                // Проверяем размер файла
+                if (audioBlob.size < 100) { // Минимальный размер
+                    showResult('error', 'Запись слишком короткая или пустая');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'recording.webm');
+
+                voiceDebug.innerHTML = '📤 Отправка аудио на сервер...';
+
+                const response = await fetch('/translate/voice', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showResult('success', `
+                        <div class="alert alert-light">
+                            <strong>Распознанная речь:</strong><br>
+                            ${data.recognized_text}
+                        </div>
+                        <div class="alert alert-success">
+                            <strong>Перевод:</strong><br>
+                            ${data.translated_text}
+                        </div>
+                    `);
+                    voiceDebug.innerHTML = '✅ Аудио успешно обработано!';
+                } else {
+                    showResult('error', data.error || 'Произошла ошибка при обработке голоса');
+                    voiceDebug.innerHTML = '❌ Ошибка: ' + data.error;
+                }
+            } catch (error) {
+                showResult('error', 'Ошибка соединения с сервером: ' + error.message);
+                voiceDebug.innerHTML = '❌ Ошибка сети: ' + error.message;
+            } finally {
+                loading.classList.add('d-none');
+                translateBtn.disabled = false;
+            }
+        }
+
+        // Общий обработчик перевода
+        document.getElementById('translate-button').addEventListener('click', async function() {
+            const textMethod = document.getElementById('textMethod').checked;
+            
+            if (textMethod) {
+                await handleTextTranslation();
+            } else {
+                await handleVoiceTranslation();
+            }
+        });
+
+        // Функция показа результатов
+        function showResult(type, content) {
+            const resultArea = document.getElementById('result-area');
+            const resultContent = document.getElementById('result-content');
+            
+            if (type === 'success') {
+                resultContent.innerHTML = content;
+            } else {
+                resultContent.innerHTML = `<div class="alert alert-danger">${content}</div>`;
+            }
+            
+            resultArea.classList.remove('d-none');
+            
+            // Прокручиваем к результатам
+            resultArea.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Очистка при закрытии страницы
+        window.addEventListener('beforeunload', function() {
+            if (isRecording) {
+                stopRecording();
+            }
+        });
+    </script>
+</body>
+</html>

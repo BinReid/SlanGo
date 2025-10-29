@@ -1,0 +1,184 @@
+body {
+            background: #6676ff;
+            font-family: "Sora", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main {
+            background: white;
+            width: 80%;
+            max-width: 900px;
+            margin: 50px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: linear-gradient(150deg, #0b0d0b, #0a5a0a);
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            font-family: "Sora", sans-serif;
+            font-weight: bold;
+            height: 100px;
+        }
+
+        .header img {
+            height: 67px;
+            margin-right: 10px;
+            border-radius: 40px;
+        }
+
+        .goal {
+            text-align: center;
+            padding: 30px 20px 10px;
+            font-family: "Sora", sans-serif;
+        }
+
+        .goal h3 {
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .goal p {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            color: #333;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn-slango {
+            font-family: "Sora", sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 15px 20px 10px;
+            border-radius: 12px;
+            color: white;
+            border: none;
+            text-decoration: none;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 160px;
+            height: 80px;
+        }
+
+        .btn-green {
+            background-color: #198754;
+        }
+
+        .btn-blue {
+            background-color: #0D6EFD;
+        }
+
+        .btn-slango:hover {
+            transform: translateY(-3px);
+            opacity: 0.9;
+        }
+
+        .btn-slango img {
+            height: 24px;
+            margin-bottom: 5px;
+        }
+
+        .about {
+            text-align: center;
+            margin-top: 40px;
+            font-family: "Sora", sans-serif;
+        }
+
+        .about h3 {
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .about b {
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+
+        .about img {
+            height: 80px;
+            vertical-align: middle;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            border-radius: 6px;
+        }
+
+        .advantages {
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 15px;
+            font-family: "Sora", sans-serif;
+        }
+
+        .advantages h4 {
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .adv-item {
+            background: linear-gradient(180deg, #1e6e1e, #093d09);
+            color: white;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .adv-item:hover {
+            transform: scale(1.03);
+        }
+
+        .adv-item img {
+            height: 24px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            color: #666;
+            font-family: "Sora", sans-serif;
+            font-size: 0.9rem;
+        }
+        .hero-section {
+            background: linear-gradient(150deg, #0b0d0b, #0a5a0a);
+            color: white;
+        }
+        .hero-section h2{
+            font-weight: bold;
+        }
+        .hero-section img{
+            height: 67px;
+            margin-right: 10px;
+            border-radius: 40px;
+        }

@@ -1,10 +1,14 @@
-from transformers import pipeline
+from gigachat import GigaChat
+from telegram import Update
 
-translator = pipeline('text2text-generation', 
-                     model='t5-base')   # ~900 MB
+giga = GigaChat(
+    credentials='MDE5YTI1YzEtZDg1Yy03ZDc3LWJiNmEtZTMzNDE1MzQyNTFhOmVjMjk5YzRlLWE3ZjgtNDc4ZS04ZDk1LWQ5NDBhZDc3NzIyZg==',
+    verify_ssl_certs=False
+)
 
-# Использование:
-prompt = f"""Ты — «Сленг-Гуру», AI-ассистент для мгновенного перевода между русским сленгом и литературным русским языком. Твои ключевые функции:
+async def process_with_gigachat(update: Update, text: str):
+    try:
+        prompt = f"""Ты — «Сленг-Гуру», AI-ассистент для мгновенного перевода между русским сленгом и литературным русским языком. Твои ключевые функции:
 
 1. Автоматическое определение стиля:
 
@@ -77,6 +81,13 @@ prompt = f"""Ты — «Сленг-Гуру», AI-ассистент для мг
 Пользователь: Спасибо!
 Ты: Пасиб! (и ничего больше, так как это не осмысленное предложение для диалога, а вежливая реакция).
 
-**Исходный текст для преобразования:**"""
-result = translator(f"{prompt}: 'Криж - это'")
-print(result[0]['generated_text'])
+**Исходный текст для преобразования:** {text}"""
+
+        response = giga.chat(prompt)
+        result_text = response.choices[0].message.content
+        
+        await update.message.reply_text(f"Перевод: {result_text}\n\nПродолжайте диалог")
+        
+    except Exception as e:
+        await update.message.reply_text("Ой, кажется у нас ошибка, но мы её обязательно решим!)")
+        print(f"GigaChat error: {e}")
