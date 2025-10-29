@@ -2,7 +2,7 @@ from gigachat import GigaChat
 from telegram import Update
 
 giga = GigaChat(
-    credentials='MDE5YTI1YzEtZDg1Yy03ZDc3LWJiNmEtZTMzNDE1MzQyNTFhOmVjMjk5YzRlLWE3ZjgtNDc4ZS04ZDk1LWQ5NDBhZDc3NzIyZg==',
+    credentials='MDE5YTI1YzEtZDg1Yy03ZDc3LWJiNmEtZTMzNDE1MzQyNTFhOmZiZGUzZWUzLThiNTktNDNhYi1iN2YxLWE5ZmZjNGI5ODcxNw==',
     verify_ssl_certs=False
 )
 
